@@ -1,0 +1,31 @@
+name: Build Android App
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+```
+
+Este conjunto de arquivos cria um aplicativo de calculadora funcional com uma interface de usuário moderna, arquitetura MVVM para separação de preocupações e um workflow de CI/CD para automatizar o processo de build no GitHub.  O arquivo `android-build.yml` garante que cada push para a branch `main` ou pull request para a `main` branch acione um build automático do projeto, gerando um APK de debug que é então carregado como um artefato.
